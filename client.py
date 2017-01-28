@@ -18,7 +18,10 @@ def init_socket(con_add, con_port):
 
 
 def send_data(client_socket):
-    data = raw_input("Enter message here: ")
+    print "####################"
+    print "Enter message here: "
+    print "####################"
+    data = raw_input()
     client_socket.send(data)
 
     client_socket.close()
