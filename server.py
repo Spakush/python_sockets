@@ -5,6 +5,7 @@ import threading
 SERVER_ADDRESS = "0.0.0.0"
 SERVER_PORT = 1337
 clients = 0
+users = {"1":"1","2":"2","3":"3","4":"4","shmulik":"123","yosi":"456"}
 
 def main():
     read_clients()
@@ -22,19 +23,32 @@ def init_socket(address, port):
 
 def wait_for_clients(server_socket):
     global clients
+    name = ""
+    passw = ""
     while True:
         (client_socket, client_address) = server_socket.accept()
         clients += 1
         save_clients_to_file()
         shlomi = threading.Thread(target=handle_client, args=(client_socket, ))
         shlomi.start()
-        
+    
 
 def handle_client(client_socket):
-    client_socket.send(str(clients))
     data = client_socket.recv(1337)
-    print data
-    client_socket.close()
+    username, password = data.split(" ")
+    print "checking password"
+    if username in users and users[username] == password:
+        print " client connected"
+        client_socket.send(str(clients))
+        print "client number sent"
+        data = client_socket.recv(1337)
+        print data
+        client_socket.close()
+    else :
+            client_socket.send("0")
+            print "wrong username or password"
+            client_socket.close()
+        
 
 def save_clients_to_file():
     with open("clients.txt", "w+") as f:
