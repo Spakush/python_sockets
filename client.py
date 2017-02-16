@@ -10,7 +10,8 @@ def main(username, password):
     print "will send args"
     client_socket.send("{} {}".format(username, password))
     print "args sent"
-    get_num(client_socket)
+    connection_conf(client_socket)
+    client_socket.close()
 
 
 def init_socket(con_add, con_port):
@@ -19,10 +20,11 @@ def init_socket(con_add, con_port):
 
     return client_socket
 
-def get_num(client_socket):
+
+def connection_conf(client_socket):
     print "waiting for msg"
     num = client_socket.recv(1337)
-    if isinstance(int(num), int) and int(num) != 0:
+    if isinstance(int(num), int) and num != '0':
         print "i'm client number {}".format(num)
         send_data(client_socket)
     else:
@@ -36,8 +38,6 @@ def send_data(client_socket):
     print "####################"
     data = raw_input()
     client_socket.send(data)
-
-    client_socket.close()
 
 
 if __name__ == "__main__":

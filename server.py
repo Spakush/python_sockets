@@ -21,6 +21,7 @@ def init_socket(address, port):
 
     return server_socket
 
+
 def wait_for_clients(server_socket):
     global clients
     name = ""
@@ -54,10 +55,12 @@ def save_clients_to_file():
     with open("clients.txt", "w+") as f:
         f.write(str(clients))
 
+
 def read_clients():
     global clients
     with open("clients.txt", "r") as f:
         clients = int(f.read(1337))
+
 
 if __name__ == "__main__":
     main()
