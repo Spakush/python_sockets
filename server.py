@@ -4,6 +4,7 @@ import threading
 
 SERVER_ADDRESS = "0.0.0.0"
 SERVER_PORT = 1337
+MAXIMUN_CONNECTIONS = 10
 clients = 0
 users = {"1":"1","2":"2","3":"3","4":"4","shmulik":"123","yosi":"456"}
 
@@ -17,7 +18,7 @@ def main():
 def init_socket(address, port):
     server_socket = socket.socket()
     server_socket.bind((address, port))
-    server_socket.listen(10)
+    server_socket.listen(MAXIMUN_CONNECTIONS)
 
     return server_socket
 
@@ -45,10 +46,10 @@ def handle_client(client_socket):
         data = client_socket.recv(1337)
         print data
         client_socket.close()
-    else :
-            client_socket.send("0")
-            print "wrong username or password"
-            client_socket.close()
+    else:
+        client_socket.send("0")
+        print "wrong username or password"
+        client_socket.close()
         
 
 def save_clients_to_file():

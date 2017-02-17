@@ -4,13 +4,12 @@ import argparse
 
 SERVER_ADDRESS = "0.0.0.0"
 SERVER_PORT = 1337
+FAILED_CONNECT = '0'
 
 def main(username, password):
     client_socket = init_socket(SERVER_ADDRESS, SERVER_PORT)
-    print "will send args"
-    client_socket.send("{} {}".format(username, password))
-    print "args sent"
-    connection_conf(client_socket)
+    if connection_conf(client_socket, username, password):
+        send_data(client_socket)
     client_socket.close()
 
 
@@ -21,16 +20,17 @@ def init_socket(con_add, con_port):
     return client_socket
 
 
-def connection_conf(client_socket):
-    print "waiting for msg"
-    num = client_socket.recv(1337)
-    if isinstance(int(num), int) and num != '0':
-        print "i'm client number {}".format(num)
-        send_data(client_socket)
+def connection_conf(client_socket, username, password):
+    client_socket.send("{} {}".format(username, password))
+    print "args sent"
+    resp = client_socket.recv(1337)
+    if resp != FAILED_CONNECT:
+        print "i'm client number {}".format(resp)
+	return True
     else:
         print "wrong arguments, can't connect"
-        print "dissconnecting"
-        
+	return False        
+
 
 def send_data(client_socket):
     print "####################"
